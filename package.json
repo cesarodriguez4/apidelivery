@@ -1,0 +1,39 @@
+{
+  "dependencies": {
+    "angular": "^1.6.2",
+    "angular-ui-router": "1.0.0-beta.3",
+    "bcrypt": "^1.0.2",
+    "body-parser": "^1.17.1",
+    "bootstrap": "^4.0.0-alpha.6",
+    "cookie-parser": "^1.4.3",
+    "cors": "^2.8.3",
+    "express": "^4.15.2",
+    "jsonwebtoken": "^7.4.0",
+    "morgan": "^1.8.1",
+    "mysql": "^2.13.0",
+    "nodemailer": "^4.0.1",
+    "pug": "^2.0.0-rc.1",
+    "randomstring": "^1.1.5",
+    "request": "^2.81.0",
+    "serve-favicon": "^2.4.2",
+    "sql-crud": "^0.2.2"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "eslintConfig": {
+    "globals": {
+      "expect": true
+    },
+    "root": true,
+    "env": {
+      "browser": true,
+      "jasmine": true
+    },
+    "parser": "babel-eslint",
+    "extends": [
+      "xo-space/esnext"
+    ]
+  }
+}
