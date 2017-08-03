@@ -1,7 +1,5 @@
 {
   "dependencies": {
-    "angular": "^1.6.2",
-    "angular-ui-router": "1.0.0-beta.3",
     "bcrypt": "^1.0.2",
     "body-parser": "^1.17.1",
     "bootstrap": "^4.0.0-alpha.6",
@@ -19,7 +17,7 @@
     "sql-crud": "^0.2.2"
   },
   "scripts": {
-    "start": "node app.js",
+    "start": "node ./app.js",
     "dev": "nodemon app.js"
   },
   "eslintConfig": {
