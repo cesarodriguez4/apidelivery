@@ -17,7 +17,7 @@
     "sql-crud": "^0.2.2"
   },
   "scripts": {
-    "start": "node ./app.js",
+    "start": "node app.js",
     "dev": "nodemon app.js"
   },
   "eslintConfig": {
