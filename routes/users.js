@@ -63,12 +63,12 @@ module.exports = (app, con, transporter) => {
         const token = jwt.sign({ data: req.body.email}, app.get('token'), { expiresIn: '72h' });
         const user = req.body.email;
         const enlace = `https://todocondelivery.herokuapp.com/activa?t=${token}&u=${user}`;
-        console.log(enlace);
-        // Enviar correo electronico
-        const message = {
+        const enlacePagina = `http://shop.todocondelivery.com`;
+
+        const bienvenidaUsuario = {
           from: '"todoConDelivery.com" <cuenta@todocondelivery.com>', 
           to: req.body.email,
-          subject: 'Verifica tu cuenta ✔',
+          subject: 'Bienvenido',
           html: `
            <body>
             <img style="margin-left: 40%" width="250" height="100" src="https://pbs.twimg.com/media/DCV9eGXXkAAf2VY.png">
@@ -80,21 +80,7 @@ module.exports = (app, con, transporter) => {
             <small><strong>nota:</strong> si eres un usuario administrador de tiendas,
             también debes ser aprobado por un supervisor de nuestra página.</small>
             <div><a href="${enlace}">Haz click en este enlace</a> </br></div>
-           </body>
-          `
-        }
-
-        const bienvenidaUsuario = {
-          from: '"todoConDelivery.com" <cuenta@todocondelivery.com>', 
-          to: req.body.email,
-          subject: 'Bienvenido',
-          html: `
-           <body>
-            <img style="margin-left: 40%" width="250" height="100" src="https://pbs.twimg.com/media/DCV9eGXXkAAf2VY.png">
-              <h1 style="background-color: #001357;color: white;font-family: arial;
-              padding: 2em;"">
-             Bienvenido
-              </h1>
+            <div>
             <p>Hola ${req.body.nombre}, 
             gracias por registrarte, solo quedan unos pasos mas
              para que puedas disfrutar de los beneficios que te 
@@ -106,6 +92,7 @@ module.exports = (app, con, transporter) => {
              antes de terminar tu pedido.</li> 
              <li>5.- Ponte cómodo mientras esperas.</li>
              <li>6.- Disfruta.</li>
+            </div>
            </body>
           ` };
 
@@ -126,9 +113,8 @@ module.exports = (app, con, transporter) => {
              un establecimiento, estos son los pasos a seguir
               para que puedas registrar tu establecimiento
                y ofrecer tus productos:</p>
-               <li>1.- Haz clic en este "enlace" 
-               que te enviara a la pagina ............. 
-               para que puedas crear tu establecimiento.</li>
+               <li>1.- Haz clic en este <a href='${enlace}'>enlace</a> para activar tu cuenta. Luego de eso 
+               abre esta <a href='${enlacePagina}'>página</a> para que puedas crear tu establecimiento.</li>
                <li>2.- Ingresa tu usuario y contraseña.</li>
                <li>3.- Dentro de la pagina podrás administrar 
                tus establecimientos, 
@@ -160,15 +146,6 @@ module.exports = (app, con, transporter) => {
             console.log(info);
           });
         }
-
-        transporter.sendMail(message, (error, info) => {
-          if (error) {
-           return console.log(error)
-           res.send(error);
-          }
-           console.log(info);
-           return res.send("Usuario creado con exito.");
-        });
       }, true);
     });
   });
@@ -179,7 +156,7 @@ module.exports = (app, con, transporter) => {
     {
       select: '*',
       from: 'USUARIOS',
-      where: {email: req.body.email, tipo: req.body.tipo, activado: 1}
+      where: {email: req.body.email, tipo: req.body.tipo, activado: 1, estado: 1}
     }, (err, results) => {
       if (err) {
         return res.send({error: 'Error inesperado: ' + err});
@@ -248,12 +225,12 @@ module.exports = (app, con, transporter) => {
     } else {
       tipo = 'USUARIOS';
     }
-    req.body.tipo;
+    delete req.body.tipo;
     crud.update(con,
       {
         table: tipo,
         values: req.body,
-        where: {email: req.body.email, tipo: req.body.tipo}
+        where: {email: req.body.email}
       }, (error, response) => {
         if (error) {
           res.send(error);

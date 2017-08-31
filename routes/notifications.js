@@ -26,7 +26,7 @@ module.exports = (app, con, transporter) => {
       from: 'NOTIFICACIONES',
       where: {
         activoAdmin: 1,
-        leido: 0
+        leidoAdmin: 0
       }
      }, (err, row) => {
       if (err) {

@@ -16,6 +16,19 @@ module.exports = (app, con, transporter) => {
         });
     });
 
+    app.get('/orders/comments/:id', (req, res) => {
+      crud.select(con, {
+        select: '*',
+        from: 'ORDENES',
+        where: {codigoEstablecimiento: req.params.id}
+      }, (err, row) => {
+        if (err) {
+          res.send(err);
+        }
+        res.send(row);
+      });
+    });
+
     app.get('/getOrder/code/:code', (req, res) => {
       const q = `SELECT DISTINCT ESTABLECIMIENTOS.nombre 
       as nombreEstablecimiento, ESTABLECIMIENTOS.telefono as 
@@ -160,9 +173,11 @@ module.exports = (app, con, transporter) => {
                 USUARIOS.nit as nitUsuario,
                 USUARIOS.apellidoNIT as apellidoNIT,
                 ORDENES.id as idOrden,
+                ORDENES.fechaPedido as fechaPedido,
                 ORDENES.direccionEntrega as direccionEntrega,
                 ORDENES.precioTotal as precioTotal,
-                ORDENES.titulo as productosComprados
+                ORDENES.titulo as productosComprados,
+                ORDENES.fechaPedido as fechaPedido
                 FROM ORDENES INNER JOIN USUARIOS
                 ON USUARIOS.codigo = ORDENES.codigoComprador
                 INNER JOIN ESTABLECIMIENTOS
@@ -200,7 +215,8 @@ module.exports = (app, con, transporter) => {
                 ORDENES.id as idOrden,
                 ORDENES.direccionEntrega as direccionEntrega,
                 ORDENES.precioTotal as precioTotal,
-                ORDENES.titulo as productosComprados
+                ORDENES.titulo as productosComprados,
+                ORDENES.fechaPedido as fechaPedido
                 FROM ORDENES INNER JOIN USUARIOS
                 ON USUARIOS.codigo = ORDENES.codigoComprador
                 INNER JOIN ESTABLECIMIENTOS

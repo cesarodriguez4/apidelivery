@@ -121,6 +121,8 @@ module.exports = (app, con, transporter) => {
 
 
   app.post('/chat', (req, res) => {
+    console.log('Comienzo en A');
+    console.log(req.body);
     let opciones = {
       from: '"Soporte" <cuenta@todocondelivery.com>', // sender address
       to: req.body.email,
@@ -142,16 +144,50 @@ module.exports = (app, con, transporter) => {
       console.log('Correo %s enviado: %s', info.messageId, info.response);
     });
 
-    crud.insert(con, {
-      insertInto: 'MENSAJES',
-      values: req.body
-    }, false, true);
-    res.send('ok');
+    crud.select(con, {
+      select: '*',
+      from: 'ADMINISTRADORES',
+      where: {id_permisos: 2},
+    }, (err, admins) => {
+      admins.map(user => {
+        let mensaje = {
+      from: '"Soporte" <cuenta@todocondelivery.com>', // sender address
+      to: user.email,
+      subject: `Nueva consulta`,
+      html: 
+       `<img style="margin-left: 40%" width="250" height="100" src="https://pbs.twimg.com/media/DCV9eGXXkAAf2VY.png">
+          <h1 style="background-color: #001357;color: white;font-family: arial;
+          padding: 2em;"">
+          Han realizado una consulta a través del soporte.
+        </h1>
+        <p>Detalles:</p>
+        <p>Nombre: ${req.body.nombre}</p>
+        <p>Email: ${req.body.email}</p>
+        <p>Motivo: ${req.body.motivo}</p>
+        <p>Mensaje: ${req.body.consulta}</p>
+        `
+    };
+    transporter.sendMail(mensaje, (error, info) => {
+      if (error) {
+        return console.log(error);
+      }
+      console.log('Correo %s enviado: %s', info.messageId, info.response);
+    });
   });
+      crud.insert(con, {
+        insertInto: 'NOTIFICACIONES',
+        values: {
+          tipo: 'SOPORTE',
+          estado: 'Han hecho una nueva consulta via email y se ha notificado a los administradores.'
+        }
+      }, false, true);
+      res.send('ok');
+});
+
+});
 
   app.get('/activa', (req, res) => {
     const token = req.query.t;
-    console.log(token);
     jwt.verify(token, app.get('token'), (error, success) => {
       if (error) {
         return res.send('Error en activación. Llave inválida');

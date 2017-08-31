@@ -36,7 +36,7 @@ module.exports = (app, con) => {
       {
         select: '*',
         from: 'ESTABLECIMIENTOS',
-        where: {subcategoria}
+        where: {subcategoria, activo: 1}
       }, (error, success) => {
         if (error) {
           res.send(error);

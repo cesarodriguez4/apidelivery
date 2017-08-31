@@ -21,7 +21,6 @@ let transporter = nodemailer.createTransport({
     }
 });
 
-
 transporter.verify(function(error, success) {
    if (error) {
         console.log(error);
@@ -52,7 +51,7 @@ app.set('token', 'sAPk0gxwel');
 app.use(cors());
 app.options('*', cors());
 
-app.use(favicon(path.join(__dirname, 'dist', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, 'src', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
@@ -75,6 +74,10 @@ require('./routes/notifications')(app, connection);
 require('./routes/auths')(app, connection);
 require('./routes/horarios')(app, connection);
 require('./routes/mensajes')(app, connection);
+require('./routes/permisos')(app, connection);
+require('./routes/deudas')(app, connection);
+require('./routes/cobros')(app, connection);
+require('./routes/promociones')(app, connection);
 // catch 404 and forwarding to error handler
 app.use(function(req, res, next) {
     var err = new Error('Not Found');

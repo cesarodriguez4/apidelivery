@@ -6,13 +6,30 @@ var random = require('randomstring');
 
 module.exports = (app, con) => {
   app.get('/admin', (req, res) => {
-    crud.select(con, {select: 'id, nombre, apellido, cargo, ciudad, estado, email, telefono, activo', from: 'ADMINISTRADORES'}, (err, rows) => {
+    const query = `
+    SELECT \`ADMINISTRADORES\`.id, 
+    \`ADMINISTRADORES\`.nombre, 
+    \`ADMINISTRADORES\`.apellido, 
+    \`ADMINISTRADORES\`.cargo, 
+    \`ADMINISTRADORES\`.ciudad, 
+    \`ADMINISTRADORES\`.estado, 
+    \`ADMINISTRADORES\`.email, 
+    \`ADMINISTRADORES\`.telefono, 
+    \`ADMINISTRADORES\`.activo, 
+    \`PERMISOS\`.id as idPermiso,
+    \`PERMISOS\`.nombre as nombrePermiso
+    FROM \`ADMINISTRADORES\` INNER JOIN
+    \`PERMISOS\` ON \`ADMINISTRADORES\`.id_permisos
+     = \`PERMISOS\`.id
+    `;
+    console.log(query);
+    con.query(query, (err, rows) => {
       if (err) {
         res.send({error: `Error en consulta: ${err}`});
         return console.log(err);
       }
       return res.send(rows);
-    }, 0, 1);
+    });
   });
   
   app.put('/admin/state', (req, res) => {
@@ -46,12 +63,17 @@ module.exports = (app, con) => {
   });
 
   app.post('/admin/login', (req, res) => {
-    crud.select(con,
-    {
-      select: '*',
-      from: 'ADMINISTRADORES',
-      where: {email: req.body.email}
-    }, (err, results) => {
+    const q = `
+    SELECT ADMINISTRADORES.*,
+         PERMISOS.id as idPermisos,
+         PERMISOS.permisos as permisosApp,
+         PERMISOS.nombre as nombrePermiso
+         FROM ADMINISTRADORES    
+         INNER JOIN PERMISOS ON 
+           ADMINISTRADORES.id_permisos = PERMISOS.id  
+         WHERE ADMINISTRADORES.email = '${req.body.email}';`;
+    console.log(q);
+    con.query(q, (err, results) => {
       if (err) {
         return res.send({error: 'Error inesperado: ' + err});
       } else {

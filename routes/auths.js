@@ -31,14 +31,14 @@ module.exports = (app, con) => {
         crud.select(con, {
         	select: '*',
         	from: 'USUARIOS',
-        	where: {email:profile.email}
+        	where: {email:profile.email, activado: 1, estado: 1}
         }, (err, result) => {
           if (result.length !== 0) {
             var token = jwt.sign({data: profile.email}, app.get('token'), { expiresIn: '24h' });
             console.log({result, token});
             res.send({result, token});
           } else {
-            res.status(200).send({error: 'Este usuario no posee cuenta en este sitio.'});
+            res.status(200).send({error: 'Este usuario no posee cuenta en este sitio o el usuario se encuentra bloqueado.'});
           }
         }, true);
       } else {
@@ -48,7 +48,7 @@ module.exports = (app, con) => {
         crud.select(con, {
         	select: '*',
         	from: 'USUARIOS',
-        	where: {email:profile.email}
+        	where: {email:profile.email, activado: 1, estado: 1}
         }, (err, result) => {
           if (result.length !== 0) {
             var token = jwt.sign({data: profile.email}, app.get('token'), { expiresIn: '24h' });
@@ -90,7 +90,7 @@ module.exports = (app, con) => {
           crud.select(con, {
             select: '*',
             from: 'USUARIOS',
-            where: {email:profile.email}
+            where: {email:profile.email, activado: 1, estado: 1}
           }, (err, result) => {
             if (result.length !== 0) {
               var token = jwt.sign({data: profile.email}, app.get('token'), { expiresIn: '24h' });
@@ -107,7 +107,7 @@ module.exports = (app, con) => {
           crud.select(con, {
             select: '*',
             from: 'USUARIOS',
-            where: {email:profile.email}
+            where: {email:profile.email, activado: 1, estado: 1}
           }, (err, result) => {
             if (result.length !== 0) {
               var token = jwt.sign({data: profile.email}, app.get('token'), { expiresIn: '24h' });

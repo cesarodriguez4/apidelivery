@@ -149,7 +149,7 @@ module.exports = (app, con) => {
     }, true);
   });
 
-  app.get('/products/byEst/:code', (req, res) => {
+  app.get('/products/byCatEst/:code', (req, res) => {
     const codigoEstablecimiento = req.params.code;
     crud.select(con, {
       select: '*',
@@ -173,31 +173,4 @@ module.exports = (app, con) => {
       res.send(result);
     });
   });
-
-  app.get('/promociones', (req, res) => {
-    crud.select(con, {
-      select: '*',
-      from: 'PROMOCIONES'
-    }, (err, result) => {
-      if (err) {
-        res.send(err);
-      }
-      res.send(result);
-    }, true);
-  });
-
-  app.get('/wallpaper', (req, res) => {
-    crud.select(con, {
-      select: '*',
-      from: 'FONDOS'
-    }, (err, result) => {
-      if (err) {
-        res.send(err);
-      }
-      res.send(result);
-    }, true);
-  });
-
-
-
 };

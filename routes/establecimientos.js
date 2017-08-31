@@ -21,7 +21,8 @@ module.exports = (app, con) => {
   app.get('/establecimientos/mails', (req, res) => {
     crud.select(con, {
       select: 'id, email, nombre',
-      from: 'ESTABLECIMIENTOS'
+      from: 'USUARIOS',
+      where: {tipo: 1}
     }, (err, row) => {
       if (err) {
         res.send({error: `Error en consulta: ${err}`});
@@ -87,8 +88,9 @@ module.exports = (app, con) => {
   });
 
   app.post('/establecimientos/new', (req, res) => {
-  	console.log(req.body);
+    const ultimoPago = new Date();
     req.body.ruta = req.body.nombre.split(' ').join('-').toLowerCase();
+    req.body.ultimoPago = ultimoPago;
     const idHorario = random.generate({
 	    length: 4,
 	    charset: 'numeric'

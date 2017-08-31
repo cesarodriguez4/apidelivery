@@ -97,17 +97,17 @@ module.exports = (app, con) => {
       });
 	});
 
-  app.put('/messages', (res, send) => {
+  app.put('/messages', (req, res) => {
     crud.update(con, {
       table: 'MENSAJES_ADMIN',
       values: req.body,
-      where: req.body.id 
+      where: { id:req.body.id } 
     }, (err, row) => {
       if (err) {
         res.send(err);
       }
       res.send(row);
-    });
+    }, true);
   });
 
 	app.delete('/messages', () => {
