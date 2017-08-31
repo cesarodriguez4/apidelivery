@@ -29,11 +29,21 @@ transporter.verify(function(error, success) {
    }
 });
 
-var connection = mysql.createConnection({
+//user todoc_main
+//password sJ3u3q%8
+
+/*var connection = mysql.createConnection({
   host     : 'wftuqljwesiffol6.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
   user     : 'qyjpkdhu7j2009zq',
   password : 'dalo41ujnktlkzdm',
   database : 'ul2fiwvka2u6vjr7'
+});*/
+
+var connection = mysql.createConnection({
+  host     : 'localhost:3306',
+  user     : 'todoc_main',
+  password : 'sJ3u3q%8',
+  database : 'todocond_db'
 });
 
 connection.connect(function(error) {
